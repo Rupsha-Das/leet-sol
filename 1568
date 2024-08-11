@@ -1,0 +1,39 @@
+dirs = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+
+class Solution:
+    def count_islands(self, grid):
+        r, c = len(grid), len(grid[0])
+        islands, t = 0, deque()
+        visited = [[False]*c for _ in range(r)]
+        for i in range(r):
+            for j in range(c):
+                if grid[i][j] == 1 and not visited[i][j]:
+                    t.append((i, j))
+                    ln = 0
+                    while t:
+                        z = len(t)
+                        ln += 1
+                        for _ in range(z):
+                            x, y = t.popleft()
+                            if not visited[x][y] and grid[x][y]:                            
+                                visited[x][y] = True
+                                for dx, dy in dirs:
+                                    h, k = x + dx, y + dy
+                                    if h >= 0 and k >= 0 and h < r and k < c and not visited[h][k] and grid[h][k]:
+                                        t.append((h, k))
+                    islands += (ln != 0)
+        return islands
+
+    def minDays(self, grid: List[List[int]]) -> int:
+        r, c = len(grid), len(grid[0])
+        islands = self.count_islands(grid)
+        if islands > 1 or islands == 0: return 0
+        islands = 0
+        for i in range(r):
+            for j in range(c):
+                if grid[i][j] == 1:
+                    grid[i][j] = 0
+                    res = self.count_islands(grid)
+                    if(res > 1): return 1
+                    grid[i][j] = 1
+        return 1 if res == 0 else 2
