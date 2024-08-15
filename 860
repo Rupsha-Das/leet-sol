@@ -1,0 +1,38 @@
+class Solution:
+    def lemonadeChange(self, bills: List[int]) -> bool:
+        if not bills or bills[0] > 5:
+            return False
+        d5 = 0
+        d10 = 0
+        d20 = 0
+
+        for x in bills:
+            if x == 5:
+                d5 += 1
+            elif x == 10:
+                d10 += 1
+            elif x == 20:
+                d20 += 1
+            
+            chg = x - 5
+            if chg == 5:
+                if d5 > 0:
+                    d5 -= 1
+                else:
+                    return False
+            if chg == 10:
+                if d10 > 0:
+                    d10 -= 1
+                elif d5 > 1:
+                    d5 -= 2
+                else:
+                    return False
+            if chg == 15:
+                if d10 > 0 and d5 > 0:
+                    d10 -= 1
+                    d5 -= 1
+                elif d5 > 2:
+                    d5 -= 3
+                else:
+                    return False
+        return True
