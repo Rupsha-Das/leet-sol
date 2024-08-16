@@ -1,0 +1,31 @@
+class Solution:
+    def maxDistance(self, arrays: List[List[int]]) -> int:
+        minmax = {x: [0, 0] for x in range(len(arrays))}
+
+        for i, arr in enumerate(arrays):
+            minmax[i][1] = arr[-1]
+            minmax[i][0] = arr[0]
+
+        decmax = sorted(minmax.keys(), key=lambda x: minmax[x][1], reverse=True)
+        ascmin = sorted(minmax.keys(), key=lambda x: minmax[x][0])
+
+        maxd = -math.inf
+
+        i, j = 0, 0
+
+        while True:
+            if decmax[i] != ascmin[j]:
+                maxd = abs(minmax[decmax[i]][1] - minmax[ascmin[j]][0])
+                break
+            elif i < len(arrays)-1 and j < len(arrays)-1:
+                grj = abs(minmax[decmax[i]][1] - minmax[ascmin[j+1]][0]) - abs(minmax[decmax[i]][1] - minmax[ascmin[j]][0])
+                gri = abs(minmax[decmax[i+1]][1] - minmax[ascmin[j]][0]) - abs(minmax[decmax[i]][1] - minmax[ascmin[j]][0])
+
+                if grj > gri:
+                    j += 1
+                else:
+                    i += 1
+            else:
+                break 
+        
+        return maxd
